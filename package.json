@@ -1,0 +1,35 @@
+{
+  "name": "EPC",
+  "version": "1.0.0",
+  "description": "EPC",
+  "author": "acewu",
+  "private": true,
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "8999"
+    }
+  },
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cross-env": "^5.2.0",
+    "echarts": "^4.2.0-rc.2",
+    "iview": "^3.2.2",
+    "js-cookie": "^2.2.0",
+    "node-sass": "^4.11.0",
+    "nuxt": "^2.0.0",
+    "qs": "^6.7.0",
+    "sass-loader": "^7.1.0",
+    "scss": "^0.2.4",
+    "scss-loader": "0.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

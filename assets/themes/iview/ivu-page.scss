@@ -1,0 +1,18 @@
+.ivu-page {
+
+  .ivu-page-item-active {
+    background: #2d8cf0;
+    border-color: #2d8cf0;
+    
+  }
+  
+
+  .ivu-page-item-active a, .ivu-page-item-active:hover a {
+    color:white;
+  }
+
+}
+
+.ivu-page.mini .ivu-page-item{
+  border-radius: 12px;
+}
