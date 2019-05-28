@@ -1,35 +1,15 @@
 <template lang="html">
-  <Menu mode="horizontal" theme="light" :active-name="activeName"  @on-select="handleSelect">
-      <div class="layout-logo">LOGO</div>
-      <div class="layout-nav">
-          <MenuItem name="/">
-              首页
-          </MenuItem>
-          <MenuItem name="/projectmanagement/list/projectlist">
-              项目列表
-          </MenuItem>
-          <MenuItem v-show="IsManage==1" name="/user/userlist">
-              平台用户信息
-          </MenuItem>
-          <MenuItem v-show="IsManage!=2" name="/system/companyManagement">
-              单位管理
-          </MenuItem>
-          <MenuItem name="/target/projecttarget">
-              项目指标
-          </MenuItem>
-          <MenuItem name="/target/targetunit">
-              指标单位
-          </MenuItem>
-
-      </div>
-      <div style="width:20%;position: absolute;right:0;padding-left:2%;">
-          <div>
-              <div style="float:left;">
+     <div>
+        <div class="userInfo">
+              <div>
+        
                 <Poptip trigger="hover" placement="bottom">
                     <div style="width:100%;">
                         <Avatar v-if="this.account.Face" size="large" :src="picUrl+this.account.Face" />
                         <Avatar v-else icon="ios-person" size="large"/>
+                        <span>{{username}}</span>
                     </div>
+
                     <div class="api" slot="content">
                         <div style="height:30px;line-height:30px;">
                             <router-link class="" to="/account/editaccount"><span>修改个人信息</span></router-link>
@@ -43,14 +23,58 @@
                     </div>
                 </Poptip> 
               </div>
-              <div style="float:left;padding-left:5%;">
+              <div>
                   <div style="height:25px;line-height:25px;padding-top:10px;">{{this.account.UserName}}</div>
                   <div style="height:25px;line-height:25px;padding-top:5px;">{{identity}}</div>
               </div>  
           </div>
+
+
+              <Menu   :active-name="activeName"  @on-select="handleSelect">
+
+        <div class="layout-logo">LOGO</div>
+             <MenuItem name="/">
+               <Icon type="ios-paper" />
+              首页
+             </MenuItem>
+
              
-      </div>
-  </Menu>
+
+             <Submenu name='projectlist'>
+                 
+                 <template slot="title">
+                  <Icon type="ios-people" />
+                    项目列表
+                 </template>
+                 <MenuItem name="/projectmanagement/list/projectlist">列表模式</MenuItem>   
+                 <MenuItem name="/projectmanagement/list/projectlist">地图模式</MenuItem> 
+             </Submenu>  
+
+             <Submenu name="system">
+                   <template slot="title">
+                   <Icon type="ios-stats" /> 
+                      系统管理
+                   </template>
+                   <MenuItem name="/system/editdepartment">部门管理</MenuItem>   
+                   <MenuItem name="/system/editperson">人员管理</MenuItem>
+                   <MenuItem name="/system/permissionManagement">权限管理</MenuItem>    
+                    
+             </Submenu> 
+             
+
+       
+             
+    
+
+       </Menu>
+     
+     
+     
+     </div>
+    
+    
+
+
 
 
 
@@ -63,17 +87,20 @@ import {
 export default {
   data() {
     return {
+      username: '',
       activeName: '',
       openNames:['1','2','3','4'],
       menuList:[],
       identity:'',
       IsManage:2,
       picUrl:null,
+      
 
     }
   },
   created() {
-      
+    this.getCustomerList();
+
       
   },
   computed: {
@@ -85,9 +112,13 @@ export default {
       this.picUrl = config.apihost+'/'
       
       this.init();
+          
+      this.getCustomerList()
+      
   },
   methods: {
     init() { 
+    
       switch(this.account.IsManage){
           case 1:
               this.identity='平台管理员';
@@ -102,7 +133,28 @@ export default {
       this.IsManage=this.account.IsManage;
 
       let path = this.$route.path;
+
       this.activeName = path;
+    },
+   
+    getCustomerList(){
+ 
+        this.$axios.post('api/Platform/GetCustomerList',{
+             Id: this.account.Id,
+             pageIndex: 1,
+             pageSize: 10,
+             CompanyID:  this.account.CompanyID
+        }).then(rs => {
+        let result = rs.data
+     
+        if (result.success) {
+         
+            this.username = result.data.list[0].DepartmentName;
+        } else {
+          this.$Message.error(result.message)
+        }
+      })
+        
     },
     handleSelect(path){
         this.$router.push({path: path});
@@ -117,28 +169,33 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import "~assets/themes/default/colors.scss";
 
 .layout-logo{
-    width: 100px;
-    height: 30px;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
     background: white;
     color:$lightblue;
     border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 20px;
-    display:flex;
+    text-align: center;
     align-items: center;
-    font-size:20px;
+    font-size:30px;
     font-weight: bold;
-}
-.layout-nav{
-    float: right;
-    margin:0 auto;
-    margin-right:20%;
 
 }
+.ivu-menu-vertical{
+    width:200px !important;
+}
+.userInfo{
+    height:70px;
+    width:200px;
+    line-height: 70px;
+    border:1px solid #f2f2f2;
+    position: fixed;
+    bottom: 10px;
+}
+
 </style>
