@@ -135,8 +135,11 @@ export default {
       }).then(rs => {
         let result = rs.data
         this.loading = false
+    
         if (result.success) {
+    
           this.$store.commit('app/setAccount', result.data)
+
           setTimeout(() => {
             this.$router.push('/');
           }, 1000)

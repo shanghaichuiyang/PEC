@@ -16,7 +16,7 @@
           <h4 style="padding:10px;">项目进度</h4>
           <Divider />
           <div v-if="projectList.length==0"><span style="padding:10px;">暂无数据</span></div>
-          <div id="leftCharts" class="charts">
+          <div id="myapp" class="charts">
             
           </div>
           <Divider />
@@ -52,58 +52,58 @@
       <Col span="8">
         <Card style="padding:10px;">
           <Row class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>姓名</span>
             </Col>
-            <Col span="19" class-name="col">
-              <span>{{this.account.UserName}}</span>
+            <Col span="17" class-name="col">
+              <span>{{this.userInfo.UserName}}</span>
             </Col>
           </Row>
           <Row v-if="this.account.IsManage!=1" class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>所属部门</span>
             </Col>
-            <Col span="19" class-name="col">
-              <span>技术部</span>
+            <Col span="17" class-name="col">
+              <span>{{this.userInfo.DepartmentName}}</span>
             </Col>
           </Row>
           <Row v-if="this.account.IsManage!=1" class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>公司名称</span>
             </Col>
-            <Col span="19" class-name="col">
-              <span>上海垂杨信息科技有限公司</span>
+            <Col span="17" class-name="col">
+              <span>{{this.account.Company}}</span>
             </Col>
           </Row>
           <Row class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>联系电话</span>
             </Col>
-            <Col span="19" class-name="col">
-              <span>{{this.account.Phone}}</span>
+            <Col span="17" class-name="col">
+              <span>{{this.account.PhoneNumber}}</span>
             </Col>
           </Row>
           <Row class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>可见项目数</span>
             </Col>
-            <Col span="19" class-name="col">
+            <Col span="17" class-name="col">
               <span>{{projectList.length}}</span>
             </Col>
           </Row>
           <Row class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>加入时间</span>
             </Col>
-            <Col span="19" class-name="col">
-              <span>{{this.account.CreateTime}}</span>
+            <Col span="17" class-name="col">
+              <span>{{this.account.StartTime}}</span>
             </Col>
           </Row>
           <Row class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
-            <Col span="5" class-name="col">
+            <Col span="7" class-name="col">
               <span>账号状态</span>
             </Col>
-            <Col span="19" class-name="col">
+            <Col span="17" class-name="col">
               <span>激活</span>
             </Col>
           </Row>
@@ -136,23 +136,10 @@ export default {
   },
   computed: {
     ...mapState('app', {
-      account: 'account'
+      account: 'account',
+      userInfo: 'userInfo'
     }),
-    // identity(){
-    //     let result='';
-    //     switch(this.account.IsManage){
-    //         case 1:
-    //             result='平台管理员';
-    //             break;
-    //         case 3:
-    //             result='公司管理员';
-    //             break;
-    //         other:
-    //             result='普通用户';
-    //             break;
-    //     }        
-    //     return result;
-    // }    
+      
   },
   watch: {
 
@@ -160,10 +147,13 @@ export default {
   mounted() {
 
     this.loadProjectList();
+    
   },
   methods: {
-    loadProjectList(){
+      loadProjectList(){
+  
       this.$axios.post('/api/Home/GetUserParticipationProject', {
+        
         UserID:this.account.Id,
         pageIndex:this.pageIndex,
         pageSize:this.pageSize,
@@ -172,6 +162,7 @@ export default {
         if (result.success) {
           this.projectList=result.data.list;
           this.loadLeftCharts(result.data.list);
+          this.domLine()
         } else {
           //this.$Message.error(result.message)
         }
@@ -179,7 +170,7 @@ export default {
     },
     loadLeftCharts(data) {
       console.log(data);
-      let leftCharts = echarts.init(document.getElementById('leftCharts'))
+   
       let xData = [];
       let yData = [];
       if(data){
@@ -191,53 +182,73 @@ export default {
         })
       }
       console.log(yData)
+      
+    },
+    domLine() {
+   
+      var dom = document.getElementById("myapp");
+      
+      var myChart = echarts.init(dom);
 
-      leftCharts.setOption({
-        color: ['#3398DB'],
-        tooltip : {
-            trigger: 'axis',
-            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-            },
-            //formatter:'{c}%'
-            formatter: '{b}<br />{a}: {c}%'
+      var app = {};
+      let ptList = this.projectList;
+
+      let ptName = [];
+      let ptNum= [];
+
+      for(var i =0;i<ptList.length;i++){
+        
+        ptName.push(ptList[i].ProjectName)
+        
+        ptNum.push(ptList[i].Percent !=null ? (ptList[i].Percent.toFixed(2))*100 :0)
+           
+      }
+      console.log(ptName)
+      app.title = "项目进度";
+
+      var option = {
+        color: ["#3398DB"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow" 
+          }
         },
         grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
         },
-        xAxis : [
-            {
-                type : 'category',
-                data : xData,
-                axisTick: {
-                    alignWithLabel: true
-                }
+        xAxis: [
+          {
+            type: "category",
+            data: ptName,
+            axisTick: {
+              alignWithLabel: true
             }
+          }
         ],
-        yAxis : [
-            {
-                type : 'value',
-                axisLabel: {  
-                  show: true,  
-                  interval: 'auto',  
-                  formatter: '{value} %'  
-                },
-                max:100
+        yAxis: [
+          {
+            type: "value",
+            axisLabel:{
+               show: true,
+               interval: 'auto',
+               formatter: '{value} %'
             }
+          }
         ],
-        series : [
-            {
-                name:'项目进度',
-                type:'bar',
-                barWidth: '8%',
-                data:yData,
-                
-            }
+        series: [
+          {
+            name: "完成度",
+            type: "bar",
+            barWidth: "30%",
+            data: ptNum
+          }
         ]
-      })
+      };
+      myChart.setOption(option, true);
     },
     handleClick(e) {
         let id = e.currentTarget.getAttribute("ProjectID")
