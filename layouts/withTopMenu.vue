@@ -7,8 +7,7 @@
                 <Layout>
             
                     <Content>
-                        <div class="layout-banner">
-                        </div>
+                      
                     </Content>
                     <Content :style="{padding: '30px 50px'}">
                         <Card>

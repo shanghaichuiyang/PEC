@@ -4,11 +4,17 @@
               <div>
                 <Poptip trigger="hover" placement="bottom">
                     <div style="width:100%;">
+                      <Col span="10" class="userHead_span">
                         <Avatar v-if="this.account.Face" size="large" :src="picUrl+this.account.Face" />
                         <Avatar v-else icon="ios-person" size="large"/>
+                      </Col>
+                      <Col span="14" class="userName_span">
+                           <p style="font-weight:800">{{this.customer.UserName}}</p>
+                           <p>{{this.customer.DepartmentName}}</p>
+                      </Col>
+                   
 
-                        <div>{{this.customer.departmentName}}</div>
-                        <div>{{this.customer.UserName}}</div>
+                        
                     </div>
                     <div class="api" slot="content">
                         <div style="height:30px;line-height:30px;">
@@ -28,7 +34,7 @@
                   <div style="height:25px;line-height:25px;padding-top:5px;">{{identity}}</div>
               </div>  
           </div>
-              <Menu   :active-name="activeName"  @on-select="handleSelect">
+       <Menu   :active-name="activeName"  @on-select="handleSelect">
         <div class="layout-logo">LOGO</div>
              <MenuItem name="/">
                <Icon type="ios-paper" />
@@ -40,8 +46,10 @@
                   <Icon type="ios-people" />
                     项目列表
                  </template>
-                 <MenuItem name="/projectmanagement/list/projectlist">列表模式</MenuItem>   
-                 <MenuItem name="/projectmanagement/list/projectlist">地图模式</MenuItem> 
+
+                 <MenuItem name="map">地图模式</MenuItem>
+                 <MenuItem name="list">列表模式</MenuItem>
+
              </Submenu>  
              <Submenu name="system">
                 <template slot="title">
@@ -76,11 +84,13 @@ export default {
   computed: {
     ...mapState("app", {
       account: "account",
-      userInfo: 'userInfo'
+      userInfo: 'userInfo',
+      navCheck: 'navCheck'
 
     })
   },
   mounted() {
+    
     this.picUrl = config.apihost + "/";
 
     this.init();
@@ -88,6 +98,7 @@ export default {
     this.getCustomerList();
   },
   methods: {
+
     init() {
       switch (this.account.IsManage) {
         case 1:
@@ -120,15 +131,35 @@ export default {
           let result = rs.data;
           
           if (result.success) {
+   
             this.customer = result.data.list[0];
-            this.$store.commit('app/setUserInfo',  result.data.list[0])
+            this.userName = result.data.list[0].UserName;
+            // console.log(this.customer.UserName)
+            this.$store.commit('app/setUserInfo',  this.customer)
           } else {
             this.$Message.error(result.message);
           }
         });
     },
     handleSelect(path) {
-      this.$router.push({ path: path });
+      // debugger;
+      // console.log(path)
+      
+      // this.$router.push({ path: path });
+  
+        switch(path){
+           case 'map':
+          //  this.$router.push({path:'/projectmanagement/list/projectlist'});
+           this.$router.push({path:'/projectmanagement/list/projectlist', query:{ value: path }});
+           break;
+
+           case 'list':
+           this.$router.push({path:'/projectmanagement/list/projectlist', query:{ value: path }});
+           break;
+           default:
+           this.$router.push({ path : path});
+
+        }
     },
     // 退出登录
     logout() {
@@ -165,5 +196,19 @@ export default {
   border: 1px solid #f2f2f2;
   position: fixed;
   bottom: 10px;
+}
+.userHead_span{
+  text-align: center;
+}
+.userName_span{
+  overflow: hidden;
+  p{
+    width: 100%;
+    overflow: hidden;
+    height: 13px;
+    line-height: 13px;
+    padding: 13px 4px;;
+    margin-top:3px;
+  }
 }
 </style>

@@ -4,6 +4,7 @@ export const state = () => ({
   // 储存用户登录信息
   account: {},
   userInfo:{},
+  navCheck:{},
 
   // 页面浏览历史
   history: {
@@ -29,11 +30,19 @@ export const mutations = {
     Cookies.set('account', account)
   },
 
+  
   setUserInfo(state,params) {
+  
     state.userInfo = params;
-    
-    Cookies.set('userInfo', userInfo)
+
+    Cookies.set('userInfo', state.userInfo)
+
   }, 
+
+  setNavCheck(state,params){
+    state.navCheck = params;
+    
+  },
 
   // 储存账户信息
   

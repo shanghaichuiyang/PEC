@@ -127,8 +127,9 @@ export default {
     },
     // 提交
     doSubmit() {
+      
         this.$Loading.start()
-        this.$axios.post('/api/Login/UpDatePassword', {
+        this.$axios.post('/api/Customer/UpDatePassword', {
             UserID:this.account.Id,
             OldPassword:this.formData.OldPassword,
             NewPassword:this.formData.NewPassword

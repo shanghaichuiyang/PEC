@@ -1,5 +1,7 @@
 <template lang="html">
   <div>
+      <div class="layout-banner">
+      </div>
     <Row>
       <Col span="16" style="padding-right:1%;">
         <span style="font-weight:bold;">参与项目</span>
@@ -169,19 +171,19 @@ export default {
       })
     },
     loadLeftCharts(data) {
-      console.log(data);
+      // console.log(data);
    
       let xData = [];
       let yData = [];
       if(data){
         data.forEach(val => {
-          console.log(val,'val');
+          // console.log(val,'val');
           xData.push(val.ProjectName);
           yData.push(val.Percent?val.Percent.toFixed(2)*100:0);
 
         })
       }
-      console.log(yData)
+      // console.log(yData)
       
     },
     domLine() {
@@ -203,7 +205,7 @@ export default {
         ptNum.push(ptList[i].Percent !=null ? (ptList[i].Percent.toFixed(2))*100 :0)
            
       }
-      console.log(ptName)
+      // console.log(ptName)
       app.title = "项目进度";
 
       var option = {
@@ -280,6 +282,13 @@ export default {
     text-overflow:ellipsis;
     white-space:nowrap;
     
+}
+.layout-banner{
+    width:100%;
+    height:18vh;
+    display:block;
+    background: url("~static/images/banner.png") no-repeat center ;
+    background-size: cover;
 }
 
 </style>

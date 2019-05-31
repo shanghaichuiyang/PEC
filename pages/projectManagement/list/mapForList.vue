@@ -1,6 +1,7 @@
 <template lang="html">
   <section class="mapforlist">
     <div><Input search enter-button="搜索" placeholder="请输入项目名称"  @on-search="search(keyWord)" /></div>
+  
     <div id="allmap" :style="mapStyle"></div>
     <Modal
         v-model="infoFlag"
@@ -114,10 +115,13 @@ export default {
     }
   },
   mounted() {
-
+   
   },
   methods: {
+
+
       load() {
+
         if (!this.isload) {
           this.isload = true
         }
@@ -256,6 +260,12 @@ export default {
       search(keyword){
         this.loadlist(keyword);
       },
+      ok(){
+
+      },
+      cancel(){
+
+      }
   }
 }
 </script>
