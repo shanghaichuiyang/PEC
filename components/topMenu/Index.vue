@@ -9,8 +9,8 @@
                         <Avatar v-else icon="ios-person" size="large"/>
                       </Col>
                       <Col span="14" class="userName_span">
-                           <p style="font-weight:800">{{this.customer.UserName}}</p>
-                           <p>{{this.customer.DepartmentName}}</p>
+                           <p style="font-weight:800">{{this.userInfo.Contact}}</p>
+                           <p>{{this.userInfo.DepartmentName}}</p>
                       </Col>
                    
 
@@ -85,7 +85,8 @@ export default {
     ...mapState("app", {
       account: "account",
       userInfo: 'userInfo',
-      navCheck: 'navCheck'
+      navCheck: 'navCheck',
+
 
     })
   },
@@ -96,6 +97,8 @@ export default {
     this.init();
 
     this.getCustomerList();
+
+
   },
   methods: {
 
@@ -148,9 +151,15 @@ export default {
       // this.$router.push({ path: path });
   
         switch(path){
+           case '/'  :
+           this.$router.push({ path : path});
+           this.$store.commit('app/setCurrentCoordinate', false);
+           break;
+
            case 'map':
           //  this.$router.push({path:'/projectmanagement/list/projectlist'});
            this.$router.push({path:'/projectmanagement/list/projectlist', query:{ value: path }});
+           this.$store.commit('app/setCurrentCoordinate', true);
            break;
 
            case 'list':
@@ -158,6 +167,7 @@ export default {
            break;
            default:
            this.$router.push({ path : path});
+           this.$store.commit('app/setCurrentCoordinate', true);
 
         }
     },

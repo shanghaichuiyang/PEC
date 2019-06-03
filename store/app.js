@@ -5,6 +5,7 @@ export const state = () => ({
   account: {},
   userInfo:{},
   navCheck:{},
+  currentCoordinate:{},
 
   // 页面浏览历史
   history: {
@@ -35,18 +36,19 @@ export const mutations = {
   
     state.userInfo = params;
 
-    Cookies.set('userInfo', state.userInfo)
+    Cookies.set('userInfo', params.userInfo)
 
   }, 
 
   setNavCheck(state,params){
     state.navCheck = params;
-    
+
   },
 
   // 储存账户信息
   
   editAccount(state, params) {
+    
  
     state.account = params
 
@@ -60,5 +62,8 @@ export const mutations = {
   setProjectid(state, params) {
     state.projectid = params
 
+  },
+  setCurrentCoordinate(state, params){
+    state.currentCoordinate = params;
   }
 }

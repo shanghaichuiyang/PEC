@@ -7,11 +7,17 @@
                 <Layout>
             
                     <Content>
+                        <div>
+             
+                        </div>
                       
                     </Content>
                     <Content :style="{padding: '30px 50px'}">
                         <Card>
                             <div style="min-height: 200px;">
+                                <div class="currentCoordinate" v-if="currentCoordinateStatus">
+                                    <Icon type="ios-send-outline" size="24" /><span>当前位置</span>     
+                                </div> 
                                 <nuxt/>
                             </div>
                         </Card>
@@ -23,6 +29,36 @@
 
     </div>
 </template>
+<script>
+import {
+  mapState
+} from 'vuex'
+export default {
+    data(){
+        return{
+            currentCoordinateStatus: true
+        }
+    },
+    watch :{
+         
+    },
+    computed: {
+    ...mapState('app', {
+      account: 'account',
+      userInfo: 'userInfo',
+      currentCoordinate: 'currentCoordinate'
+    }),
+      
+  },
+    mounted(){
+
+        console.log(this.currentCoordinate)
+        // this.currentCoordinateStatus = this.currentCoordinate;
+    }
+}
+
+
+</script>
 
 
 
@@ -43,9 +79,12 @@
     background: url("~static/images/banner.png") no-repeat center ;
     background-size: cover;
 }
-.ivu-layout-sider{
-   
-
+.currentCoordinate{
+    cursor: pointer;
+    padding:5px 0;
+    span{
+        color:#999;
+    }
 }
 
 </style>

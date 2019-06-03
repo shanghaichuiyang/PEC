@@ -58,7 +58,7 @@
               <span>姓名</span>
             </Col>
             <Col span="17" class-name="col">
-              <span>{{this.userInfo.UserName}}</span>
+              <span>{{this.userInfo.Contact}}</span>
             </Col>
           </Row>
           <Row v-if="this.account.IsManage!=1" class-name="row" style="margin-top:20px;border-bottom: 1px solid #eee;">
@@ -125,6 +125,7 @@ export default {
   layout: 'withTopMenu',
   data() {
     return {
+
       projectList:[],
       pageIndex:1,
       pageSize:10,
@@ -149,6 +150,8 @@ export default {
   mounted() {
 
     this.loadProjectList();
+
+
     
   },
   methods: {
@@ -263,6 +266,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 
 .charts{
   min-height:555px;

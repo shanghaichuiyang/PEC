@@ -70,7 +70,8 @@ export default {
   },
   computed: {
     ...mapState('app', {
-      account: 'account'
+      account: 'account',
+      currentCoordinate: 'currentCoordinate'
     }),    
   },
   props: {
@@ -83,6 +84,7 @@ export default {
   },
   mounted() {
       this.loadlist();
+
 
   },
   methods: {
@@ -114,6 +116,7 @@ export default {
       },
       handleClick(e) {
         let id = e.currentTarget.getAttribute("ProjectID")
+        
         
         this.$router.push({path: '/projectmanagement/project/home', query: {'ProjectID': id}})
       },

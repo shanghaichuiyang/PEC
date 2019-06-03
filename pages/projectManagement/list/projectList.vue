@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <div class="top-right-button">
-        <div>value {{this.$route.query.value}} </div>
+        <!-- <div>value {{this.$route.query.value}} </div> -->
       <Button type="primary" @click="handleAddClick($event)">添加</Button>
     </div>
     <Tabs  :value="actName"  @on-click="tabcontrol">

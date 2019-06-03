@@ -1,14 +1,40 @@
 <template lang="html">
   <div>
-    <h3 style="padding:10px 0;">修改个人信息</h3>
+    <Row style="padding-bottom:20px;">
+      <Col span="12" class="page_title">
+           修改个人信息
+      </Col>  
+      <Col span="12" class="nuxt_link">
+          <nuxt-link to="/">
+              <Button type="primary" size="large">返回首页</Button> 
+          </nuxt-link> 
+           
+      </Col> 
+    </Row>  
+
     <Divider />
+    
+    <Row>
+       <Col span="1" style="height:30px;line-height:35px;">
+            头像
+       </Col>
+       <Col>
+          <Upload :before-upload="handleUpload" action="">
+              <Button >上传头像</Button>
+              <div class="img_div" >
+                    <img v-show="picShow" style="border-radius: 50px;" :src="pictureSrc?pictureSrc:picUrl+formData.Face">
+              </div>
+          </Upload>
+       </Col>
+
+    </Row>
     <Form 
         ref="form" 
         :model="formData" 
         :rules="formRules" 
         label-position="top"
         >
-        <FormItem style="padding-bottom:20px;"
+         <!-- <FormItem style="padding-bottom:20px;"
           label="头像" 
           prop="Picture">
           <Row>
@@ -20,11 +46,11 @@
                     <p v-show="picShow" class="pic" style="display:block;width:100px;height:100px;">
                         <img style="border-radius: 50px;" :src="pictureSrc?pictureSrc:picUrl+formData.Face">
                     </p>
-                    <!-- <p v-show="picShow" class="pic"><Avatar size="large" :src="pictureSrc?pictureSrc:picUrl+formData.Picture" /></p> -->
+                 <p v-show="picShow" class="pic"><Avatar size="large" :src="pictureSrc?pictureSrc:picUrl+formData.Picture" /></p> 
                 </Upload>
               </Col>
           </Row>
-        </FormItem>
+        </FormItem>  -->
         <FormItem style="padding-bottom:20px;"
           label="姓名" 
           prop="UserName">
@@ -38,7 +64,7 @@
           </Row>          
         </FormItem>
         <FormItem style="padding-bottom:20px;"
-          label="手机号码" 
+          label="联系电话" 
           prop="Phone">
           <Row>
               <Col span="12">
@@ -52,9 +78,12 @@
         </FormItem>
         <FormItem style="text-align:center;padding-bottom:20px;">
           <Row>
-              <Col span="12">
-                <Button class="no" @click="doCancelled()">&nbsp;&nbsp;取消&nbsp;&nbsp;</Button>
-                <Button class="yes" @click="doBeforeSubmit('form')">&nbsp;&nbsp;确认&nbsp;&nbsp;</Button>
+              <Col span="12" class="needSubmit_col12">
+                <Button type="primary" size="large" >确定</Button>  
+                <Button  size="large" >取消</Button>
+                <!-- <Button class="no" @click="doCancelled()">&nbsp;&nbsp;取消&nbsp;&nbsp;</Button> -->
+
+                <!-- <Button class="yes" @click="doBeforeSubmit('form')">&nbsp;&nbsp;确认&nbsp;&nbsp;</Button> -->
               </Col>
           </Row>
           
@@ -88,13 +117,13 @@ export default {
       formRules: {
         UserName: [{
           type: 'string',
-          required: true,
+          // required: true,
           message: '请输入姓名',
           trigger: 'blur',
         }],
         Phone: [{
           validator: validateMobileCheck,
-          required: true,
+          // required: true,
           trigger: 'blur'
         }],
       },
@@ -111,7 +140,8 @@ export default {
   },
   computed: {
     ...mapState('app', {
-      account: 'account'
+      account: 'account',
+      userInfo: 'userInfo'
     }),    
   },
   mounted() {
@@ -147,32 +177,57 @@ export default {
     doSubmit() {
       let that = this;
       if(that.formData) {
-        let data = new FormData()
-        if(that.file){
-          data.append('file', that.file)
-        }        
-        let obj = that.formData;
+        // let data = new FormData()
+        // if(that.file){
+        //   data.append('file', that.file)
+        // }        
+        // let obj = that.formData;
 
 
-        Object.keys(obj).forEach(function(key){
-            data.append(key, obj[key]?obj[key]:'')
-        });
-
+        // Object.keys(obj).forEach(function(key){
+        //     data.append(key, obj[key]?obj[key]:'')
+        // });
+     
+    
         that.$Loading.start()
-        that.$axios2.post('/api/Login/UpDateUserInfo', data).then(rs => {
+
+        that.$axios.post('/api/Login/UpdateUserBasicInfor',{
+              Id: this.account.Id,
+              Face: '',
+              Contact: this.formData.UserName,
+              PhoneNumber: this.formData.Phone,
+              file: ''
+
+        }
+         ).then(rs => {
             that.$Loading.finish()
+
             if (rs.data.success) {
+
               let result = Object.assign({}, that.formData);
               if(rs.data.data){
-                result.Face =  rs.data.data;
-                that.$store.commit('app/editAccount', result)
+
+                // result.Face =  rs.data.data;
+                // that.$store.commit('app/editAccount', result)
               }
+
+       
+
               that.$Message.success(rs.data.message)
-              setTimeout(()=>{that.$router.push('/')}, 1000);
+
+              // setTimeout(()=>{that.$router.push('/')}, 1000);
+
             } else {
               that.$Message.error(rs.data.message)
             }
         })
+            
+                // const newAccount = this.account;
+                // newAccount.Contact = this.formData.UserName;
+                // newAccount.PhoneNumber = this.formData.Phone;
+              
+         
+    
       }
 
     },
@@ -193,4 +248,35 @@ export default {
   top:16px;
   z-index:1;
 }
+.page_title{
+  font-size: 25px;
+}
+.nuxt_link{
+   text-align: right;
+
+}
+.img_div{
+  width:100px;
+  height:100px;
+  border-radius:50px;
+  border:2px solid #f2f2f2;
+  text-align: center;
+  line-height: 80px;
+  margin-left:150px;
+  img{
+    width:100%;
+    height:100%;
+   }
+  }
+  .needSubmit_col12 button:nth-child(1){
+    padding:8px 45px;
+    float: left;
+  }
+  .needSubmit_col12 button:nth-child(2){
+    margin-left:30px;
+    padding:8px 45px;
+     float: left;
+  }
+
+
 </style>

@@ -16,21 +16,21 @@
           <Row class="Row">
             <Col>
               <FormItem prop="UserName" label="姓名">
-                <Input ref="UserName" v-model="formData.UserName" placeholder="请输入姓名" :maxlength="30" autocomplete="off" type="text" style="width:100%" />
+                <Input ref="UserName" v-model="formData.UserName" placeholder="请输入姓名" :maxlength="30" autocomplete="off" type="text" style="width:100%" ></Input>
               </FormItem>
             </Col>
           </Row>
           <Row class="Row">
             <Col>
               <FormItem prop="Phone" label="手机号码">
-                <Input ref="Phone" v-model="formData.Phone" placeholder="请输入手机号码" :maxlength="11" autocomplete="off" type="text" style="width:100%" />
+                <Input ref="Phone" v-model="formData.Phone" placeholder="请输入手机号码" :maxlength="11" autocomplete="off" type="text" style="width:100%" ></Input>
               </FormItem>
             </Col>
           </Row>
           <Row class="Row">
             <Col span="18">
               <FormItem prop="SmsCode" label="验证码">
-                <Input ref="SmsCode" v-model="formData.SmsCode" placeholder="请输入验证码" :maxlength="10" autocomplete="off" type="text" style="width:100%" />
+                <Input ref="SmsCode" v-model="formData.SmsCode" placeholder="请输入验证码" :maxlength="10" autocomplete="off" type="text" style="width:100%" ></Input>
               </FormItem>
             </Col>
             <Col span="6">
@@ -41,31 +41,31 @@
           <Row class="Row">
             <Col>
               <FormItem prop="CompanyName" label="注册公司">
-                <Input ref="CompanyName" v-model="formData.CompanyName" placeholder="请输入注册公司" :maxlength="30" autocomplete="off" type="text" style="width:100%" />
+                <Input ref="CompanyName" v-model="formData.CompanyName" placeholder="请输入注册公司" :maxlength="30" autocomplete="off" type="text" style="width:100%" ></Input>
               </FormItem>
             </Col>
           </Row>
-          <Row class="Row">
+          <!--<Row class="Row">
             <Col>
               <FormItem prop="CompanyType" label="公司类型">
                 <Select ref="CompanyType" v-model="formData.CompanyType" style="width:100%">
                     <Option v-for="item in companyTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-                <!-- <Input v-model="formData.CompanyType" placeholder="请输入公司类型" :maxlength="30" autocomplete="off" type="text" style="width:100%" /> -->
+                 <Input v-model="formData.CompanyType" placeholder="请输入公司类型" :maxlength="30" autocomplete="off" type="text" style="width:100%" /> 
               </FormItem>
             </Col>
-          </Row>
+          </Row>-->
           <Row class="Row">
             <Col>
               <FormItem prop="Passwords" label="密码">
-                <Input ref="Passwords" v-model="formData.Passwords" placeholder="请输入密码" :maxlength="30" autocomplete="off" type="password" style="width:100%" />
+                <Input ref="Passwords" v-model="formData.Passwords" placeholder="请输入密码" :maxlength="30" autocomplete="off" type="password" style="width:100%" ></Input>
               </FormItem>
             </Col>
           </Row>
           <Row class="Row">
             <Col>
               <FormItem prop="confirmPasswords" label="确认密码">
-                <Input ref="confirmPasswords" v-model="formData.confirmPasswords" placeholder="请输入确认密码" :maxlength="30" autocomplete="off" type="password" style="width:100%" />
+                <Input ref="confirmPasswords" v-model="formData.confirmPasswords" placeholder="请输入确认密码" :maxlength="30" autocomplete="off" type="password" style="width:100%" ></Input>
               </FormItem>
             </Col>
           </Row>
@@ -241,14 +241,15 @@ export default {
       })
     },
     doRegist(){
-      this.$axios.post('/api/Login/RegisterUser', {
+      this.$axios.post('/api/Customer/RegisterUser', {
         SmsCode:this.formData.SmsCode,
         Phone:this.formData.Phone,
-        AccountNumber:this.formData.Phone,
-        UserName:this.formData.UserName,
+        PhoneNumber:this.formData.Phone,
+        Contact:this.formData.UserName,
         CompanyName:this.formData.CompanyName,
         Passwords:this.formData.Passwords,
-        CompanyType:this.formData.CompanyType
+        // CompanyType:this.formData.CompanyType
+        Account:this.formData.Phone
       }).then(rs => {
         let result = rs.data
         this.loading = false
