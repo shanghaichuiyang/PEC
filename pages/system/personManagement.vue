@@ -1,15 +1,13 @@
 <template lang="html">
   <div>
     
-    <Col span="12">
+    <!-- <Col span="12">
       <h4 style="padding:10px;">人员管理</h4>
     </Col>
     <Col span="12" style="text-align:right;">
       <router-link class="" to="/system/editperson"><Button type="primary">添加</Button></router-link>
-    </Col>
-    <Divider />
+    </Col> -->
     <Input search enter-button="搜索" placeholder="请输入搜索内容" v-model="keyWord" @on-search="search(keyWord)" />
-    <Divider />
     <Table :columns="listColumns" :data="listData" style="margin-top:20px;">
       <template slot-scope="{ row, index }" slot="action">
         <div>
@@ -27,10 +25,13 @@ import {
   mapState
 } from 'vuex'
 export default {
-  layout: 'withLeftMenu',
+  layout: 'withTopMenu2',
   data() {
     return {
       listColumns:[
+        {
+            type: 'selection'
+        },
         {
             title: '序号',
             key: 'UserID'
@@ -74,12 +75,11 @@ export default {
         },
 
       ],
-      listData:[
-        
-      ],
+      listData:[],
       totalCount:0,
       currentPage:1,
       pageSize:10,
+      keyWord:null,
     }
   },
   components: {
@@ -94,31 +94,48 @@ export default {
     }),  
   },
   mounted() {
-    this.loadlist();
+    this.loadData();
+    if(document.getElementById("one") || document.getElementById("two")){
+      document.getElementById("two").innerText = "人员管理"
+    }
   },
   methods: {
-    loadlist(keyword){
+    // loadlist(keyword){
+    //   let that = this;
+    //   this.$axios.post('/api/Login/SelectAllUserInfo', {
+    //       // IsManage:2,
+    //       // CompanyId:this.account.CompanyId
+    //       UserName:keyWord,
+    //   }).then(rs => {
+    //       if (rs.data.success) {
+    //         that.totalCount=rs.data.data.RowCount;
+    //         that.listData=rs.data.data.VarList;
+
+    //       } else {
+    //           that.totalCount=0;
+    //           that.listData=[];
+    //           //this.$Message.error(rs.data.message)
+    //       }
+    //   })
+    // },
+
+    loadData(keyWord){
       let that = this;
 
       this.$axios.post('/api/Login/SelectAllUserInfo', {
-          IsManage:2,
-          CompanyId:this.account.CompanyId
+          UserName:keyWord,
       }).then(rs => {
-          if (rs.data.success) {
-            that.totalCount=rs.data.data.RowCount;
-            that.listData=rs.data.data.VarList;
-
-          } else {
+            if (rs.data.success) {
+              that.totalCount=rs.data.data.RowCount;
+              that.listData=rs.data.data.VarList;
+            } else {
               that.totalCount=0;
               that.listData=[];
-              //this.$Message.error(rs.data.message)
-          }
-      })
-
-
-
-
+            }
+        })
     },
+
+
     edit(e){
       let ID = e.currentTarget.getAttribute("personid")
 
@@ -154,7 +171,7 @@ export default {
 
     },
     search(keyword){
-        this.loadlist(keyword);
+        this.loadData(keyword);
     }
 
   },

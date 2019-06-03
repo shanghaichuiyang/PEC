@@ -22,13 +22,13 @@
                         </div>
                     </div>
                 </Poptip> 
+                
               </div>
               <div>
                   <div style="height:25px;line-height:25px;padding-top:10px;">{{this.account.UserName}}</div>
                   <div style="height:25px;line-height:25px;padding-top:5px;">{{identity}}</div>
               </div>  
           </div>
-
 
               <Menu   :active-name="activeName"  @on-select="handleSelect">
 
@@ -37,9 +37,6 @@
                <Icon type="ios-paper" />
               首页
              </MenuItem>
-
-             
-
              <Submenu name='projectlist'>
                  
                  <template slot="title">
@@ -55,30 +52,14 @@
                    <Icon type="ios-stats" /> 
                       系统管理
                    </template>
-                   <MenuItem name="/system/editdepartment">部门管理</MenuItem>   
+                   <MenuItem name="/system/departmentManagement2">部门管理</MenuItem>   
                    <MenuItem name="/system/editperson">人员管理</MenuItem>
                    <MenuItem name="/system/permissionManagement">权限管理</MenuItem>    
-                    
              </Submenu> 
-             
-
-       
-             
-    
-
        </Menu>
-     
-     
-     
      </div>
-    
-    
-
-
-
-
-
 </template>
+
 <script>
 import config from '~/app.config.js'
 import {

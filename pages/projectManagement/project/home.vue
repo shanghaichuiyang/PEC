@@ -248,6 +248,9 @@ export default {
   },
   mounted() {
     let pid = this.$route.query.ProjectID;
+    
+    console.log('pid===' + pid) //undefined
+
     if(pid){
       this.$store.commit('app/setProjectid', this.$route.query.ProjectID)
     }    
@@ -305,6 +308,7 @@ export default {
             this.$Loading.finish()
             let result = rs.data
             if (result.success) {
+                console.log('sss' + result.data);
                 result.data.list.forEach(val => {
                   points.push({'x':val.XAxis,'y':val.YAxis,'id':val.Id,'code':val.PileCode,'stats':val.Stats});
                 })

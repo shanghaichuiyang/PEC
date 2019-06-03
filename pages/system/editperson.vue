@@ -79,7 +79,7 @@ import {
   mapState
 } from 'vuex'
 export default {
-  layout: 'withTopMenu',
+  layout: 'withTopMenu2',
   data() {
     const validateMobileCheck = (rule, value, callback) => {
       if (/^[1][3,4,5,7,8][0-9]{9}$/.test(value) === false) {
