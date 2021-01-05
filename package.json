@@ -17,7 +17,7 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cross-env": "^5.2.0",
     "echarts": "^4.2.0-rc.2",
     "iview": "^3.2.2",
